@@ -80,7 +80,7 @@ export class MCPClient {
           sampling: {},
         },
         clientInfo: {
-          name: 'nanoagent',
+          name: 'nanocode',
           version: '0.1.0',
         },
       },

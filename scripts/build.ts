@@ -1,10 +1,10 @@
 /**
- * Build script for NanoAgent
+ * Build script for NanoCode
  */
 
 import { execSync } from 'child_process';
 
-console.log('Building NanoAgent...');
+console.log('Building NanoCode...');
 
 try {
   // Run TypeScript compiler

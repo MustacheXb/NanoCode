@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * NanoAgent CLI
+ * NanoCode CLI
  * Main entry point for the command-line interface
  */
 
@@ -25,7 +25,7 @@ import { planCommand } from './commands.js';
 const program = new Command();
 
 program
-  .name('nanoagent')
+  .name('nanocode')
   .description('A command-line AI programming agent')
   .version(packageJson.version)
   .option('-v, --verbose', 'Enable verbose output')

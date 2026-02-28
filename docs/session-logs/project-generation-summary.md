@@ -1,8 +1,8 @@
-# NanoAgent 项目生成过程总结
+# NanoCode 项目生成过程总结
 
 ## 概述
 
-本文档记录了 NanoAgent 项目从初始规划到成功运行的完整过程，包括项目初始化、架构设计、代码实现、错误修复等各个环节。
+本文档记录了 NanoCode 项目从初始规划到成功运行的完整过程，包括项目初始化、架构设计、代码实现、错误修复等各个环节。
 
 **生成时间**: 2026-03-01
 
@@ -23,7 +23,7 @@
 创建了完整的项目目录结构：
 
 ```
-nanoagent/
+nanocode/
 ├── src/
 │   ├── cli/                 # 命令行入口与UI
 │   ├── core/                # 核心智能体逻辑
@@ -234,7 +234,7 @@ $ node dist/cli/index.js --version
 #### 帮助命令
 ```bash
 $ node dist/cli/index.js --help
-Usage: nanoagent [options] [command]
+Usage: nanocode [options] [command]
 
 A command-line AI programming agent
 
@@ -246,8 +246,8 @@ Options:
   -h, --help                 display help for command
 
 Commands:
-  run [options] [prompt...]  Run NanoAgent with a prompt or skill
-  init [options]             Initialize a new NanoAgent session
+  run [options] [prompt...]  Run NanoCode with a prompt or skill
+  init [options]             Initialize a new NanoCode session
   chat [options]             Start interactive chat mode
   plan [options] [task...]   Plan mode for complex multi-step tasks
   help [command]             display help for command
@@ -256,7 +256,7 @@ Commands:
 #### Init 命令测试
 ```bash
 $ node dist/cli/index.js init
-Initializing NanoAgent session...
+Initializing NanoCode session...
 Session ID: 3f2d24dc-dc05-40e3-8488-f9f124b7b76d
 Session initialized successfully
 ```
@@ -325,7 +325,7 @@ node dist/cli/index.js --help
 ### B. 项目文件结构
 
 ```
-nanoagent/
+nanocode/
 ├── config/
 │   └── default.json
 ├── docs/

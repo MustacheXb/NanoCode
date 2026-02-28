@@ -49,7 +49,7 @@ export const webfetchTool: Tool = {
       const response = await fetch(url, {
         method,
         headers: {
-          'User-Agent': 'NanoAgent/0.1.0',
+          'User-Agent': 'NanoCode/0.1.0',
           ...headers,
         },
         body,
@@ -128,7 +128,7 @@ export const websearchTool: Tool = {
       // In production, you'd integrate with a real search API (e.g., Bing, Google, DuckDuckGo)
       // For now, we'll use a simple approach or return a message
 
-      const engine = process.env.NANOAGENT_SEARCH_ENGINE || 'duckduckgo';
+      const engine = process.env.NANOCODE_SEARCH_ENGINE || 'duckduckgo';
 
       // Placeholder: In production, implement actual search API integration
       if (engine === 'duckduckgo') {
@@ -137,7 +137,7 @@ export const websearchTool: Tool = {
         return {
           success: false,
           data: null,
-          error: 'Web search not configured. Please set up NANOAGENT_SEARCH_ENGINE environment variable or implement search API integration.',
+          error: 'Web search not configured. Please set up NANOCODE_SEARCH_ENGINE environment variable or implement search API integration.',
         };
       }
 

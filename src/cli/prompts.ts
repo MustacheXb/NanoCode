@@ -11,7 +11,7 @@ import { confirm } from '@inquirer/prompts';
  * Initialize a new session
  */
 export async function initSession(options: { config?: string; dir?: string }): Promise<void> {
-  console.log('Initializing NanoAgent session...');
+  console.log('Initializing NanoCode session...');
 
   // Load or create config
   const _config = await loadConfig(options.config);
@@ -50,7 +50,7 @@ export async function runAgent(
     permissionLevel?: string;
   }
 ): Promise<void> {
-  console.log('Running NanoAgent...');
+  console.log('Running NanoCode...');
 
   if (options.skill) {
     console.log(`Using skill: ${options.skill}`);
@@ -301,7 +301,7 @@ async function loadConfig(configPath?: string): Promise<AgentConfig> {
       memoryStrategy: 'lru',
     },
     storage: {
-      dbPath: '.nanoagent/nanoagent.db',
+      dbPath: '.nanocode/nanocode.db',
       sessionTTL: 7 * 24 * 60 * 60 * 1000,
     },
   };

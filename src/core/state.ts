@@ -152,7 +152,7 @@ export class AgentStateManager {
     const fs = await import('fs/promises');
     const path = await import('path');
 
-    const stateDir = path.join(process.cwd(), '.nanoagent');
+    const stateDir = path.join(process.cwd(), '.nanocode');
     const stateFile = path.join(stateDir, `${sessionId}.json`);
 
     try {
@@ -170,7 +170,7 @@ export class AgentStateManager {
     const fs = await import('fs/promises');
     const path = await import('path');
 
-    const stateFile = path.join(process.cwd(), '.nanoagent', `${sessionId}.json`);
+    const stateFile = path.join(process.cwd(), '.nanocode', `${sessionId}.json`);
 
     try {
       const content = await fs.readFile(stateFile, 'utf-8');
@@ -187,7 +187,7 @@ export class AgentStateManager {
     const fs = await import('fs/promises');
     const path = await import('path');
 
-    const stateFile = path.join(process.cwd(), '.nanoagent', `${sessionId}.json`);
+    const stateFile = path.join(process.cwd(), '.nanocode', `${sessionId}.json`);
 
     try {
       await fs.unlink(stateFile);
@@ -203,7 +203,7 @@ export class AgentStateManager {
     const fs = await import('fs/promises');
     const path = await import('path');
 
-    const stateDir = path.join(process.cwd(), '.nanoagent');
+    const stateDir = path.join(process.cwd(), '.nanocode');
 
     try {
       const files = await fs.readdir(stateDir);

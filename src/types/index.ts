@@ -1,5 +1,5 @@
 /**
- * Core type definitions for NanoAgent
+ * Core type definitions for NanoCode
  */
 
 // ===== Agent Types =====

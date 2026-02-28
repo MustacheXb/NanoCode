@@ -1,10 +1,10 @@
 /**
- * Development script for NanoAgent
+ * Development script for NanoCode
  */
 
 import { spawn } from 'child_process';
 
-console.log('Starting NanoAgent in development mode...');
+console.log('Starting NanoCode in development mode...');
 
 // Run with tsx watch for hot reload
 const child = spawn('npx', ['tsx', 'watch', 'src/cli/index.ts'], {

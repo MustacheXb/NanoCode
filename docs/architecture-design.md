@@ -1,4 +1,4 @@
-# NanoAgent 代码架构实现设计文档
+# NanoCode 代码架构实现设计文档
 
 ## 目录
 
@@ -86,7 +86,7 @@
 ### 模块分层
 
 ```
-nanoagent/
+nanocode/
 ├── cli/              # 表现层：用户交互
 ├── core/             # 核心层：Agent Loop 和状态管理
 ├── tools/            # 工具层：工具注册与执行
@@ -1127,13 +1127,13 @@ class SessionManager {
 const program = new Command();
 
 program
-  .name('nanoagent')
+  .name('nanocode')
   .version('0.1.0');
 
 // run 命令
 program
   .command('run [prompt...]')
-  .description('运行 NanoAgent')
+  .description('运行 NanoCode')
   .option('-s, --skill <name>', '使用指定技能')
   .option('-m, --model <name>', '使用指定模型')
   .action(async (prompt, options) => {
@@ -1190,7 +1190,7 @@ function App({ state, logs }: { state: AgentState; logs: string[] }) {
     <Box flexDirection="column">
       <Box>
         <Text bold color="green">
-          NanoAgent [{state}]
+          NanoCode [{state}]
         </Text>
       </Box>
       <Box flexDirection="column">

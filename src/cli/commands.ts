@@ -1,19 +1,19 @@
 /**
  * CLI Commands
- * Command definitions for NanoAgent
+ * Command definitions for NanoCode
  */
 
 import { Command } from 'commander';
 
 /**
- * Initialize a new NanoAgent project/session
+ * Initialize a new NanoCode project/session
  */
 export const initCommand = new Command('init')
-  .description('Initialize a new NanoAgent session')
+  .description('Initialize a new NanoCode session')
   .option('-c, --config <path>', 'Path to config file')
   .option('-d, --dir <path>', 'Working directory')
   .action(async (options) => {
-    console.log('Initializing NanoAgent session...');
+    console.log('Initializing NanoCode session...');
 
     const { initSession } = await import('./prompts.js');
     await initSession(options);
@@ -22,10 +22,10 @@ export const initCommand = new Command('init')
   });
 
 /**
- * Run NanoAgent with a prompt or skill
+ * Run NanoCode with a prompt or skill
  */
 export const runCommand = new Command('run')
-  .description('Run NanoAgent with a prompt or skill')
+  .description('Run NanoCode with a prompt or skill')
   .argument('[prompt...]', 'The prompt or command to execute')
   .option('-s, --skill <name>', 'Use a specific skill')
   .option('-f, --file <path>', 'Read prompt from file')

@@ -71,7 +71,7 @@ export function formatSystemMessage(content: string): Message {
  */
 export function createDefaultSystemMessage(): Message {
   return formatSystemMessage(
-    `You are NanoAgent, a helpful AI programming assistant. You assist users with software engineering tasks by:
+    `You are NanoCode, a helpful AI programming assistant. You assist users with software engineering tasks by:
 1. Understanding user requests and asking clarifying questions when needed
 2. Exploring codebases to understand structure and context
 3. Writing, reading, and editing code using available tools

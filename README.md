@@ -1,10 +1,10 @@
-# NanoAgent
+# NanoCode
 
 A command-line AI programming agent powered by Claude, inspired by Claude Code and OpenCode.
 
 ## Overview
 
-NanoAgent is a self-driven intelligent agent for software engineering tasks. It features a complete Agent Loop, MCP tool scheduling, context/memory compression, and intelligent codebase perception.
+NanoCode is a self-driven intelligent agent for software engineering tasks. It features a complete Agent Loop, MCP tool scheduling, context/memory compression, and intelligent codebase perception.
 
 ## Core Features
 
@@ -25,7 +25,7 @@ npm install
 npm run build
 
 # Run the CLI
-nanoagent --help
+nanocode --help
 
 # Development mode with hot reload
 npm run dev
@@ -34,7 +34,7 @@ npm run dev
 ## Project Structure
 
 ```
-nanoagent/
+nanocode/
 ├── src/
 │   ├── cli/                 # Command-line interface
 │   ├── core/               # Core agent logic
@@ -62,7 +62,7 @@ nanoagent/
 
 ```bash
 # Clone and navigate to project
-cd nanoagent
+cd nanocode
 
 # Install dependencies
 npm install
@@ -91,16 +91,16 @@ npm run lint
 
 ```bash
 # Initialize a new session
-nanoagent init
+nanocode init
 
 # Run with a specific skill
-nanoagent run --skill commit
+nanocode run --skill commit
 
 # Interactive mode
-nanoagent chat
+nanocode chat
 
 # Plan mode for complex tasks
-nanoagent plan "Add user authentication"
+nanocode plan "Add user authentication"
 ```
 
 ## Configuration

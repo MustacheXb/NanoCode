@@ -45,7 +45,7 @@
     "maxObservations": 500
   },
   "storage": {
-    "dbPath": ".nanoagent/nanoagent.db",
+    "dbPath": ".nanocode/nanocode.db",
     "sessionTTL": 604800000,
     "autoSave": true
   },

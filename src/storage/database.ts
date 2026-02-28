@@ -225,7 +225,7 @@ export class NanoDatabase {
  */
 export function createDatabase(config?: Partial<DatabaseConfig>): NanoDatabase {
   const defaultConfig: DatabaseConfig = {
-    path: config?.path || path.join(process.cwd(), '.nanoagent', 'nanoagent.db'),
+    path: config?.path || path.join(process.cwd(), '.nanocode', 'nanocode.db'),
     memory: config?.memory || false,
     readonly: config?.readonly || false,
   };

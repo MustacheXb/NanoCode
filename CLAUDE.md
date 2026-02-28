@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-NanoAgent is a command-line AI programming agent inspired by Claude Code and OpenCode. It implements a self-driven intelligent agent with Agent Loop, MCP tool scheduling, context/memory compression, and code intelligence capabilities.
+NanoCode is a command-line AI programming agent inspired by Claude Code and OpenCode. It implements a self-driven intelligent agent with Agent Loop, MCP tool scheduling, context/memory compression, and code intelligence capabilities.
 
 ## Commands
 

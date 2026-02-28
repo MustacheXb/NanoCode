@@ -253,7 +253,7 @@ export class SessionManager {
         memoryStrategy: 'lru',
       },
       storage: {
-        dbPath: '.nanoagent/nanoagent.db',
+        dbPath: '.nanocode/nanocode.db',
         sessionTTL: 7 * 24 * 60 * 60 * 1000, // 7 days
       },
     };
