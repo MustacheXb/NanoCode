@@ -1,6 +1,6 @@
 # NanoCode
 
-A command-line AI programming agent powered by Claude, inspired by Claude Code and OpenCode.
+A command-line Mini CodeAgent powered by Claude, inspired by Claude Code and OpenCode.
 
 ## Overview
 
@@ -19,16 +19,16 @@ NanoCode is a self-driven intelligent agent for software engineering tasks. It f
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Build the project
-npm run build
+pnpm run build
 
 # Run the CLI
 nanocode --help
 
 # Development mode with hot reload
-npm run dev
+pnpm run dev
 ```
 
 ## Project Structure
@@ -65,16 +65,39 @@ nanocode/
 cd nanocode
 
 # Install dependencies
-npm install
+pnpm install
 
 # Run tests
-npm test
+pnpm test
 
 # Run with TypeScript compiler watch mode
-npm run dev
+pnpm run dev
 
 # Build for production
-npm run build
+pnpm run build
+```
+
+### Development Debugging with npm link
+
+Use `npm link` to create a global symlink, allowing you to test the CLI as if installed globally:
+
+```bash
+# Build the project first
+pnpm run build
+
+# Create global symlink to nanocode command
+npm link
+
+# Now you can use nanocode anywhere
+nanocode --help
+nanocode init
+nanocode chat
+
+# After code changes, rebuild to update the linked command
+pnpm run build
+
+# Remove global symlink when done
+npm unlink -g nanocode
 ```
 
 ### Code Style
