@@ -1,0 +1,58 @@
+{
+  "name": "nanoagent",
+  "version": "0.1.0",
+  "description": "A command-line AI programming agent powered by Claude",
+  "main": "dist/cli/index.js",
+  "bin": {
+    "nanoagent": "./dist/cli/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/cli/index.ts",
+    "start": "node dist/cli/index.js",
+    "test": "vitest",
+    "test:unit": "vitest test/unit",
+    "test:integration": "vitest test/integration",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "clean": "node -e \"require('fs').rmSync('dist', {recursive:true,force:true})\"",
+    "postinstall": "tsc"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "claude",
+    "cli",
+    "programming"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.33.1",
+    "@inquirer/prompts": "^7.4.1",
+    "better-sqlite3": "^11.8.1",
+    "chalk": "^5.4.1",
+    "commander": "^12.1.0",
+    "execa": "^9.5.2",
+    "fast-glob": "^3.3.3",
+    "ink": "^5.1.1",
+    "js-tiktoken": "^1.0.15",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.13.5",
+    "@types/react": "^19.0.8",
+    "@typescript-eslint/eslint-plugin": "^8.24.1",
+    "@typescript-eslint/parser": "^8.24.1",
+    "eslint": "^9.20.1",
+    "prettier": "^3.5.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
