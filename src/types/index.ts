@@ -249,3 +249,125 @@ export interface SkillContext {
   context: Context;
   timestamp: number;
 }
+
+// ===== LSP Types =====
+
+export interface LSPServerStatus {
+  name: string;
+  status: 'starting' | 'running' | 'stopped' | 'error';
+  pid?: number;
+  uptimeMs?: number;
+  lastError?: string;
+}
+
+export interface LSPCapabilities {
+  definitionProvider: boolean;
+  referencesProvider: boolean;
+  diagnosticsProvider: boolean;
+  completionProvider: boolean;
+  hoverProvider: boolean;
+  documentSymbolProvider: boolean;
+  renameProvider: boolean;
+  codeActionProvider: boolean;
+}
+
+export interface LSPDiagnostic {
+  range: CodeRange;
+  severity: 'error' | 'warning' | 'info' | 'hint';
+  message: string;
+  source?: string;
+  code?: string | number;
+}
+
+export interface LSPCompletionItem {
+  label: string;
+  kind: number;
+  detail?: string;
+  documentation?: string;
+  insertText?: string;
+  sortText?: string;
+}
+
+export interface LSPHover {
+  contents: string | { kind: string; value: string } | Array<string | { language: string; value: string }>;
+  range?: CodeRange;
+}
+
+export interface LSPLocation {
+  uri: string;
+  range: CodeRange;
+}
+
+// ===== Tree-sitter Types =====
+
+export interface TreeSitterOptions {
+  includeComments: boolean;
+  maxFileSizeKB: number;
+}
+
+export interface ParseResult {
+  tree: CodeNode;
+  language: string;
+  parseTimeMs: number;
+}
+
+// ===== LSP Types =====
+
+export interface LSPServerStatus {
+  name: string;
+  status: 'starting' | 'running' | 'stopped' | 'error';
+  pid?: number;
+  uptimeMs?: number;
+  lastError?: string;
+}
+
+export interface LSPCapabilities {
+  definitionProvider: boolean;
+  referencesProvider: boolean;
+  diagnosticsProvider: boolean;
+  completionProvider: boolean;
+  hoverProvider: boolean;
+  documentSymbolProvider: boolean;
+  renameProvider: boolean;
+  codeActionProvider: boolean;
+}
+
+export interface LSPDiagnostic {
+  range: CodeRange;
+  severity: 'error' | 'warning' | 'info' | 'hint';
+  message: string;
+  source?: string;
+  code?: string | number;
+}
+
+export interface LSPCompletionItem {
+  label: string;
+  kind: number;
+  detail?: string;
+  documentation?: string;
+  insertText?: string;
+  sortText?: string;
+}
+
+export interface LSPHover {
+  contents: string | { kind: string; value: string } | Array<string | { language: string; value: string }>;
+  range?: CodeRange;
+}
+
+export interface LSPLocation {
+  uri: string;
+  range: CodeRange;
+}
+
+// ===== Tree-sitter Types =====
+
+export interface TreeSitterOptions {
+  includeComments: boolean;
+  maxFileSizeKB: number;
+}
+
+export interface ParseResult {
+  tree: CodeNode;
+  language: string;
+  parseTimeMs: number;
+}

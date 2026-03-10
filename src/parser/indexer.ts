@@ -7,11 +7,13 @@ import type { CodeSymbol } from '../types/index.js';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { glob } from 'fast-glob';
+import { TreeSitterParser, createTreeSitterParser } from './tree-sitter/parser.js';
 
 export interface IndexerOptions {
   includePatterns?: string[];
   excludePatterns?: string[];
   ignoreDirs?: string[];
+  useTreeSitter?: boolean;
 }
 
 export interface IndexResult {
@@ -26,7 +28,8 @@ export interface IndexResult {
 export class CodeIndexer {
   private symbols: Map<string, CodeSymbol[]>;
   private symbolMap: Map<string, CodeSymbol>; // Quick lookup by unique key
-  private options: IndexerOptions;
+  private options: Required<IndexerOptions>;
+  private treeSitterParser: TreeSitterParser | null = null;
 
   constructor(options: IndexerOptions = {}) {
     this.symbols = new Map();
@@ -35,7 +38,21 @@ export class CodeIndexer {
       includePatterns: options.includePatterns || ['**/*.{ts,js,py,rs,go,java}'],
       excludePatterns: options.excludePatterns || ['**/node_modules/**', '**/dist/**', '**/build/**'],
       ignoreDirs: options.ignoreDirs || ['node_modules', 'dist', 'build', '.git'],
+      useTreeSitter: options.useTreeSitter ?? true,
     };
+
+    if (this.options.useTreeSitter) {
+      this.treeSitterParser = createTreeSitterParser();
+    }
+  }
+
+  /**
+   * Initialize the indexer (loads Tree-sitter)
+   */
+  async init(): Promise<void> {
+    if (this.treeSitterParser) {
+      await this.treeSitterParser.init();
+    }
   }
 
   /**
@@ -45,7 +62,7 @@ export class CodeIndexer {
     const startTime = Date.now();
 
     // Find all files to index
-    const files = await glob(this.options.includePatterns!.join(','), {
+    const files = await glob(this.options.includePatterns.join(','), {
       cwd: dirPath,
       ignore: this.options.excludePatterns,
       onlyFiles: true,
@@ -82,7 +99,7 @@ export class CodeIndexer {
     // Use appropriate parser based on file extension
     const languageMap: Record<string, string> = {
       '.ts': 'typescript',
-      '.tsx': 'typescript',
+      '.tsx': 'tsx',
       '.js': 'javascript',
       '.jsx': 'javascript',
       '.py': 'python',
@@ -97,15 +114,28 @@ export class CodeIndexer {
 
     const language = languageMap[ext] || 'unknown';
 
-    // Extract symbols using regex (simplified - production would use Tree-sitter)
-    return this.extractSymbols(content, filePath, language);
+    // Try Tree-sitter first, fall back to regex
+    if (this.treeSitterParser && this.treeSitterParser.isLanguageSupported(language)) {
+      try {
+        const tsSymbols = await this.treeSitterParser.extractSymbols(content, filePath, language);
+        if (tsSymbols.length > 0) {
+          return tsSymbols;
+        }
+      } catch (error) {
+        // Fall back to regex extraction
+        console.warn(`Tree-sitter parsing failed for ${filePath}, using regex fallback`);
+      }
+    }
+
+    // Fallback: Extract symbols using regex
+    return this.extractSymbolsRegex(content, filePath, language);
   }
 
   /**
    * Extract symbols from code using regex patterns
-   * Note: In production, this would use Tree-sitter for accurate parsing
+   * Fallback when Tree-sitter is not available
    */
-  private extractSymbols(
+  private extractSymbolsRegex(
     content: string,
     filePath: string,
     language: string
@@ -156,9 +186,6 @@ export class CodeIndexer {
       javascript: [
         { kind: 'function', pattern: /(?:function\s+(\w+)|(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?function|\s*(\w+)\s*=\s*(?:async\s+)?\([^)]*\)\s*=>)/g },
         { kind: 'class', pattern: /class\s+(\w+)/g },
-        { kind: 'interface', pattern: /interface\s+(\w+)/g },
-        { kind: 'type', pattern: /type\s+(\w+)\s*=/g },
-        { kind: 'enum', pattern: /enum\s+(\w+)/g },
         { kind: 'variable', pattern: /(?:const|let|var)\s+(\w+)\s*=/g },
       ],
       typescript: [
