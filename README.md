@@ -14,6 +14,7 @@ NanoCode is a self-driven intelligent agent for software engineering tasks. It f
 - **Code Intelligence**: Tree-sitter parsing, LSP integration, and symbol indexing
 - **Security**: Permission model (Plan/Ask/Accept/Bypass) and execution sandbox
 - **Persistence**: SQLite-based session management and history tracking
+- **Thought Tracking**: Comprehensive tracking of agent reasoning with compression, export, and visualization
 
 ## Quick Start
 
@@ -138,23 +139,27 @@ Configuration is stored in `config/default.json`. Key options include:
 ## Roadmap
 
 ### Phase 1: Core Foundation
+
 - [x] Project structure
 - [ ] Basic Agent Loop
 - [ ] Built-in tools (file, search, bash)
 - [ ] LLM client integration
 
 ### Phase 2: Tool System
+
 - [ ] MCP protocol integration
 - [ ] Tool registry and scheduling
 - [ ] Permission model
 - [ ] Sandbox execution
 
 ### Phase 3: Code Intelligence
+
 - [ ] Tree-sitter parsing
 - [ ] LSP client
 - [ ] Symbol indexing
 
 ### Phase 4: Advanced Features
+
 - [ ] Context compression
 - [ ] Memory management
 - [ ] Skill system

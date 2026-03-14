@@ -101,7 +101,76 @@ node dist/cli/index.js --help
 ## NOTES
 
 - **No CI/CD**: No .github/workflows directory
-- **No integration tests**: `test/integration/` directory empty
+- **Integration tests**: `test/integration/thought-tracking.test.ts` validates Thought tracking
 - **Duplicate configs**: Both `.prettierrc` and `prettier.config.js` exist
 - **postinstall runs tsc**: Can slow npm installs
 - **LSP unavailable in this environment**: typescript-language-server not installed globally
+
+## THOUGHT TRACKING (NEW)
+
+### Overview
+
+ContextManager now includes comprehensive Thought tracking for the Agent Loop. Thoughts are automatically recorded during agent execution and can be queried, compressed, exported, and visualized.
+
+### Key Features
+
+- **Automatic Thought Recording**: Thoughts are tracked with state (thinking/acting/observing/completed/error)
+- **Smart Compression**: LRU and smart compression strategies to manage memory
+- **Multiple Export Formats**: JSON and CSV export for analysis
+- **HTML Visualization**: Generate beautiful HTML reports with statistics
+- **State-based Queries**: Filter thoughts by agent state
+- **Metadata Support**: Rich metadata including confidence, alternatives, token usage
+
+### API Usage
+
+```typescript
+// Add a thought
+const thoughtId = contextManager.addThought({
+  content: 'Analyzing the problem',
+  state: 'thinking',
+  metadata: {
+    confidence: 0.95,
+    tokensUsed: 42,
+  },
+})
+
+// Get all thoughts
+const allThoughts = await contextManager.getThoughts()
+
+// Query by state
+const thinkingThoughts = await contextManager.getThoughtsByState('thinking')
+
+// Compress thoughts
+await contextManager.compressThoughts()
+
+// Export to JSON
+const jsonExport = await contextManager.exportThoughts('json')
+
+// Export to CSV
+const csvExport = await contextManager.exportThoughts('csv')
+
+// Generate HTML report
+const htmlReport = await contextManager.generateThoughtReport()
+```
+
+### Integration with AgentLoop
+
+The AgentLoop automatically creates Thought objects during state transitions:
+
+- `thinking` state: Records LLM reasoning
+- `acting` state: Records tool execution decisions
+- `observing` state: Records observation analysis
+- `completed` state: Records task completion
+- `error` state: Records error conditions
+
+### Testing
+
+Integration tests in `test/integration/thought-tracking.test.ts` verify:
+
+- Thought lifecycle tracking
+- State-based querying
+- Compression strategies
+- Export functionality (JSON/CSV)
+- HTML report generation
+- Metadata handling
+- Performance with large thought sets

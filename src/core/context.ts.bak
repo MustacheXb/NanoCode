@@ -4,12 +4,15 @@
  */
 
 import type {
+  Action,
   AgentState,
   Context,
   ContextMetadata,
   Message,
   MemoryItem,
   Observation,
+  Reflection,
+  StepTrace,
   Thought,
 } from '../types/index.js'
 
@@ -19,7 +22,10 @@ export interface ContextOptions {
   maxMemoryItems?: number
   compressOnThreshold?: number
   maxTokens?: number
+  sessionId?: string
+  maxContextTokens?: number
   compressionStrategy?: 'lru' | 'smart' | 'none'
+  dbPath?: string
 }
 
 export class ContextManager {
@@ -33,7 +39,10 @@ export class ContextManager {
       maxMemoryItems: options.maxMemoryItems ?? 1000,
       compressOnThreshold: options.compressOnThreshold ?? 0.9,
       maxTokens: options.maxTokens ?? 200000,
+      sessionId: options.sessionId ?? crypto.randomUUID(),
+      maxContextTokens: options.maxContextTokens ?? 10000,
       compressionStrategy: options.compressionStrategy ?? 'smart',
+      dbPath: options.dbPath ?? ':memory:',
     }
 
     this.context = this.createContext(initialContext)
@@ -51,12 +60,13 @@ export class ContextManager {
       stepTraces: partial?.stepTraces ?? [],
       reflections: partial?.reflections ?? [],
       metadata: partial?.metadata ?? {
-        sessionId: crypto.randomUUID(),
+        sessionId: this.options.sessionId,
         startTime: Date.now(),
         lastUpdate: Date.now(),
         tokensUsed: 0,
       },
     }
+  }
   }
 
   /**
@@ -367,11 +377,11 @@ export class ContextManager {
    * Get context summary
    */
   getSummary(): {
-    messageCount: number
-    memoryCount: number
-    observationCount: number
-    estimatedTokens: number
-    sessionDuration: number
+    messageCount: number;
+    memoryCount: number;
+    observationCount: number;
+    estimatedTokens: number;
+    sessionDuration: number;
   } {
     return {
       messageCount: this.context.messages.length,
@@ -424,7 +434,7 @@ export class ContextManager {
 
     if (strategy === 'lru') {
       // Keep only recent thoughts
-      const maxThoughts = Math.floor(this.options.maxTokens / 100)
+      const maxThoughts = Math.floor(this.options.maxContextTokens / 100)
       if (this.context.thoughts.length > maxThoughts) {
         this.context.thoughts = this.context.thoughts.slice(-maxThoughts)
       }
@@ -473,6 +483,7 @@ export class ContextManager {
    */
   private mergeThoughtBatch(thoughts: Thought[]): Thought {
     const first = thoughts[0]
+    const last = thoughts[thoughts.length - 1]
 
     return {
       id: crypto.randomUUID(),
@@ -492,17 +503,15 @@ export class ContextManager {
    */
   async exportThoughts(format: 'json' | 'csv'): Promise<string> {
     if (format === 'json') {
-      {
-        return JSON.stringify(
-          {
-            sessionId: this.context.metadata.sessionId,
-            thoughts: this.context.thoughts,
-            exportedAt: Date.now(),
-          },
-          null,
-          2
-        )
-      }
+      return JSON.stringify(
+        {
+          sessionId: this.context.metadata.sessionId,
+          thoughts: this.context.thoughts,
+          exportedAt: Date.now(),
+        },
+        null,
+        2
+      )
     } else if (format === 'csv') {
       const headers = ['id', 'content', 'state', 'timestamp']
       const rows = this.context.thoughts.map(t =>
@@ -583,7 +592,7 @@ export class ContextManager {
     }
     .thought-state {
       padding: 4px 12px;
-      border-radius:与其他12px;
+      border-radius: 12px;
       font-size: 0.85em;
       font-weight: 500;
     }
@@ -663,5 +672,7 @@ export class ContextManager {
   async close(): Promise<void> {
     // Placeholder for cleanup if needed
     // Currently using in-memory storage
+  }
+}
   }
 }

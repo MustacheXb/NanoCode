@@ -1,7 +1,7 @@
 {
   "name": "nanocode",
-  "version": "0.1.0",
-  "description": "A command-line AI programming agent powered by Claude",
+  "version": "0.2.0",
+  "description": "A command-line AI programming agent with comprehensive thought tracking and visualization",
   "main": "dist/cli/index.js",
   "bin": {
     "nanocode": "./dist/cli/index.js"

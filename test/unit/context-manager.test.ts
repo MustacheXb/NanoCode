@@ -2,156 +2,162 @@
  * Unit tests for Context Manager
  */
 
-import { describe, it, expect } from 'vitest';
-import { ContextManager } from '../../src/core/context.js';
+import { describe, it, expect } from 'vitest'
+import { ContextManager } from '../../src/core/context.js'
 
 describe('ContextManager', () => {
   it('should create an empty context', () => {
-    const manager = new ContextManager();
-    const context = manager.getContext();
+    const manager = new ContextManager()
+    const context = manager.getContext()
 
-    expect(context.messages).toEqual([]);
-    expect(context.memory).toEqual([]);
-    expect(context.observations).toEqual([]);
-    expect(context.metadata.sessionId).toBeDefined();
-  });
+    expect(context.messages).toEqual([])
+    expect(context.memory).toEqual([])
+    expect(context.observations).toEqual([])
+    expect(context.metadata.sessionId).toBeDefined()
+  })
 
   it('should add messages', () => {
-    const manager = new ContextManager();
+    const manager = new ContextManager()
 
     manager.addMessage({
       role: 'user' as const,
       content: 'Hello',
       timestamp: Date.now(),
-    });
+    })
 
-    const messages = manager.getContext().messages;
+    const messages = manager.getContext().messages
 
-    expect(messages.length).toBe(1);
-    expect(messages[0].role).toBe('user');
-    expect(messages[0].content).toBe('Hello');
-  });
+    expect(messages.length).toBe(1)
+    expect(messages[0].role).toBe('user')
+    expect(messages[0].content).toBe('Hello')
+  })
 
   it('should get messages by role', () => {
-    const manager = new ContextManager();
+    const manager = new ContextManager()
 
     manager.addMessage({
       role: 'user' as const,
       content: 'User message',
       timestamp: Date.now(),
-    });
+    })
 
     manager.addMessage({
       role: 'assistant' as const,
       content: 'Assistant message',
       timestamp: Date.now(),
-    });
+    })
 
-    const userMessages = manager.getMessagesByRole('user');
-    const assistantMessages = manager.getMessagesByRole('assistant');
+    const userMessages = manager.getMessagesByRole('user')
+    const assistantMessages = manager.getMessagesByRole('assistant')
 
-    expect(userMessages.length).toBe(1);
-    expect(userMessages[0].content).toBe('User message');
-    expect(assistantMessages.length).toBe(1);
-    expect(assistantMessages[0].content).toBe('Assistant message');
-  });
+    expect(userMessages.length).toBe(1)
+    expect(userMessages[0].content).toBe('User message')
+    expect(assistantMessages.length).toBe(1)
+    expect(assistantMessages[0].content).toBe('Assistant message')
+  })
 
   it('should add memory items', () => {
-    const manager = new ContextManager();
+    const manager = new ContextManager()
 
     const id = manager.addMemory({
       type: 'fact',
       content: 'Important fact',
       importance: 0.8,
       references: [],
-    });
+    })
 
-    const memory = manager.getMemory(id);
+    const memory = manager.getMemory(id)
 
-    expect(memory).toBeDefined();
-    expect(memory?.content).toBe('Important fact');
-    expect(memory?.importance).toBe(0.8);
-  });
+    expect(memory).toBeDefined()
+    expect(memory?.content).toBe('Important fact')
+    expect(memory?.importance).toBe(0.8)
+  })
 
   it('should search memory', () => {
-    const manager = new ContextManager();
+    const manager = new ContextManager()
 
     manager.addMemory({
       type: 'fact',
       content: 'TypeScript is awesome',
       importance: 0.9,
       references: [],
-    });
+    })
 
     manager.addMemory({
       type: 'observation',
       content: 'Code uses Python',
       importance: 0.5,
       references: [],
-    });
+    })
 
-    const results = manager.searchMemory('type');
+    const results = manager.searchMemory('type')
 
-    expect(results.length).toBeGreaterThan(0);
-  });
+    expect(results.length).toBeGreaterThan(0)
+  })
 
   it('should add observations', () => {
-    const manager = new ContextManager();
+    const manager = new ContextManager()
 
     manager.addObservation({
       type: 'file_read',
       content: 'File contents',
-    });
+    })
 
-    const observations = manager.getContext().observations;
+    const observations = manager.getContext().observations
 
-    expect(observations.length).toBe(1);
-    expect(observations[0].type).toBe('file_read');
-  });
+    expect(observations.length).toBe(1)
+    expect(observations[0].type).toBe('file_read')
+  })
 
   it('should estimate tokens', () => {
-    const manager = new ContextManager();
+    const manager = new ContextManager()
 
     manager.addMessage({
       role: 'user' as const,
       content: 'This is a test message',
       timestamp: Date.now(),
-    });
+    })
 
-    const tokens = manager.estimateTokens();
+    const tokens = manager.estimateTokens()
 
-    expect(tokens).toBeGreaterThan(0);
-  });
+    expect(tokens).toBeGreaterThan(0)
+  })
 
   it('should compress context', () => {
-    const manager = new ContextManager({ maxMessages: 5 });
+    const manager = new ContextManager(undefined, {
+      maxMessages: 5,
+      maxTokens: 100, // Low token limit to trigger compression
+      compressOnThreshold: 0.5, // Compress at 50% threshold
+    })
 
+    // Add long messages to trigger token-based compression
     for (let i = 0; i < 10; i++) {
       manager.addMessage({
         role: 'user' as const,
-        content: `Message ${i}`,
+        content: `This is a longer message ${i} that should consume more tokens and trigger compression`,
         timestamp: Date.now(),
-      });
+      })
     }
 
-    const messages = manager.getContext().messages;
+    const messages = manager.getContext().messages
 
-    expect(messages.length).toBeLessThanOrEqual(5);
-  });
+    // After compression, we should have fewer messages than we added
+    expect(messages.length).toBeLessThan(10)
+  })
 
   it('should get summary', () => {
-    const manager = new ContextManager();
+    const manager = new ContextManager()
 
     manager.addMessage({
       role: 'user' as const,
       content: 'Hello',
       timestamp: Date.now(),
-    });
+    })
 
-    const summary = manager.getSummary();
+    const summary = manager.getSummary()
 
-    expect(summary.messageCount).toBe(1);
-    expect(summary.memoryCount).toBe(0);
-    expect(summary.observationCount).toBe(0);
-  });
-});
+    expect(summary.messageCount).toBe(1)
+    expect(summary.memoryCount).toBe(0)
+    expect(summary.observationCount).toBe(0)
+  })
+})

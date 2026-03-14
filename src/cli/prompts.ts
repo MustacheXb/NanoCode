@@ -3,23 +3,23 @@
  * Handles user interaction and prompts
  */
 
-import type { Context, AgentConfig } from '../types/index.js';
-import { input } from '@inquirer/prompts';
-import { confirm } from '@inquirer/prompts';
+import type { Context, AgentConfig } from '../types/index.js'
+import { input } from '@inquirer/prompts'
+import { confirm } from '@inquirer/prompts'
 
 /**
  * Initialize a new session
  */
 export async function initSession(options: { config?: string; dir?: string }): Promise<void> {
-  console.log('Initializing NanoCode session...');
+  console.log('Initializing NanoCode session...')
 
   // Load or create config
-  const _config = await loadConfig(options.config);
-  void _config; // Config loaded for side effects
+  const _config = await loadConfig(options.config)
+  void _config // Config loaded for side effects
 
   // Set working directory
   if (options.dir) {
-    process.chdir(options.dir);
+    process.chdir(options.dir)
   }
 
   // Create initial context
@@ -27,16 +27,19 @@ export async function initSession(options: { config?: string; dir?: string }): P
     messages: [],
     memory: [],
     observations: [],
+    thoughts: [],
+    stepTraces: [],
+    reflections: [],
     metadata: {
       sessionId: crypto.randomUUID(),
       startTime: Date.now(),
       lastUpdate: Date.now(),
       tokensUsed: 0,
     },
-  };
+  }
 
-  console.log(`Session ID: ${context.metadata.sessionId}`);
-  console.log('Session initialized successfully');
+  console.log(`Session ID: ${context.metadata.sessionId}`)
+  console.log('Session initialized successfully')
 }
 
 /**
@@ -45,30 +48,30 @@ export async function initSession(options: { config?: string; dir?: string }): P
 export async function runAgent(
   prompt: string,
   options: {
-    skill?: string;
-    nonInteractive?: boolean;
-    permissionLevel?: string;
+    skill?: string
+    nonInteractive?: boolean
+    permissionLevel?: string
   }
 ): Promise<void> {
-  console.log('Running NanoCode...');
+  console.log('Running NanoCode...')
 
   if (options.skill) {
-    console.log(`Using skill: ${options.skill}`);
+    console.log(`Using skill: ${options.skill}`)
   }
 
   if (options.permissionLevel) {
-    console.log(`Permission level: ${options.permissionLevel}`);
+    console.log(`Permission level: ${options.permissionLevel}`)
   }
 
   if (!prompt && !options.nonInteractive) {
-    prompt = await input({ message: 'Enter your request:' });
+    prompt = await input({ message: 'Enter your request:' })
   }
 
   if (prompt) {
-    console.log(`Processing: ${prompt}`);
-    console.log('Agent execution complete');
+    console.log(`Processing: ${prompt}`)
+    console.log('Agent execution complete')
   } else {
-    console.log('No prompt provided');
+    console.log('No prompt provided')
   }
 }
 
@@ -76,35 +79,35 @@ export async function runAgent(
  * Start interactive chat mode
  */
 export async function startChat(options: {
-  session?: string;
-  model?: string;
-  permissionLevel?: string;
+  session?: string
+  model?: string
+  permissionLevel?: string
 }): Promise<void> {
-  console.log('Starting interactive chat mode...');
+  console.log('Starting interactive chat mode...')
 
   if (options.session) {
-    console.log(`Resuming session: ${options.session}`);
+    console.log(`Resuming session: ${options.session}`)
   }
 
   if (options.model) {
-    console.log(`Using model: ${options.model}`);
+    console.log(`Using model: ${options.model}`)
   }
 
-  console.log('Type your message and press Enter to send.');
-  console.log('Type /exit or /quit to exit.\n');
+  console.log('Type your message and press Enter to send.')
+  console.log('Type /exit or /quit to exit.\n')
 
-  let running = true;
+  let running = true
 
   while (running) {
-    const message = await input({ message: 'You:' });
+    const message = await input({ message: 'You:' })
 
     if (message === '/exit' || message === '/quit') {
-      running = false;
-      console.log('Goodbye!');
+      running = false
+      console.log('Goodbye!')
     } else if (message.startsWith('/')) {
-      console.log(`Command: ${message}`);
+      console.log(`Command: ${message}`)
     } else {
-      console.log(`You: ${message}`);
+      console.log(`You: ${message}`)
     }
   }
 }
@@ -116,31 +119,31 @@ export async function planTask(
   task: string,
   options: { file?: string; approve?: boolean }
 ): Promise<void> {
-  console.log('Planning mode activated');
+  console.log('Planning mode activated')
 
   if (!task && !options.file) {
-    task = await input({ message: 'Describe the task you want to plan:' });
+    task = await input({ message: 'Describe the task you want to plan:' })
   }
 
-  console.log(`Task: ${task}`);
-  console.log('\nAnalyzing task and creating plan...');
+  console.log(`Task: ${task}`)
+  console.log('\nAnalyzing task and creating plan...')
 
-  console.log('\nPlan:');
-  console.log('1. Understand requirements');
-  console.log('2. Analyze codebase');
-  console.log('3. Create implementation plan');
-  console.log('4. Execute changes');
+  console.log('\nPlan:')
+  console.log('1. Understand requirements')
+  console.log('2. Analyze codebase')
+  console.log('3. Create implementation plan')
+  console.log('4. Execute changes')
 
   if (!options.approve) {
     const approved = await confirm({
       message: 'Approve this plan?',
       default: true,
-    });
+    })
 
     if (approved) {
-      console.log('Plan approved. Executing...');
+      console.log('Plan approved. Executing...')
     } else {
-      console.log('Plan rejected.');
+      console.log('Plan rejected.')
     }
   }
 }
@@ -149,16 +152,16 @@ export async function planTask(
  * List all sessions
  */
 export async function listSessions(): Promise<void> {
-  console.log('Sessions:');
-  console.log('No sessions found');
+  console.log('Sessions:')
+  console.log('No sessions found')
 }
 
 /**
  * Show session details
  */
 export async function showSession(id: string): Promise<void> {
-  console.log(`Session: ${id}`);
-  console.log('Session not found');
+  console.log(`Session: ${id}`)
+  console.log('Session not found')
 }
 
 /**
@@ -168,12 +171,12 @@ export async function deleteSession(id: string): Promise<void> {
   const confirmed = await confirm({
     message: `Delete session ${id}?`,
     default: false,
-  });
+  })
 
   if (confirmed) {
-    console.log(`Session ${id} deleted`);
+    console.log(`Session ${id} deleted`)
   } else {
-    console.log('Cancelled');
+    console.log('Cancelled')
   }
 }
 
@@ -181,7 +184,7 @@ export async function deleteSession(id: string): Promise<void> {
  * List all tools
  */
 export async function listTools(options: { category?: string }): Promise<void> {
-  console.log('Available tools:');
+  console.log('Available tools:')
 
   const tools = [
     { name: 'read', description: 'Read file contents', category: 'file' },
@@ -192,11 +195,11 @@ export async function listTools(options: { category?: string }): Promise<void> {
     { name: 'glob', description: 'Find files matching pattern', category: 'search' },
     { name: 'webfetch', description: 'Fetch content from URL', category: 'web' },
     { name: 'symbols', description: 'Extract code symbols', category: 'code' },
-  ];
+  ]
 
   for (const tool of tools) {
     if (!options.category || tool.category === options.category) {
-      console.log(`  ${tool.name.padEnd(15)} - ${tool.description}`);
+      console.log(`  ${tool.name.padEnd(15)} - ${tool.description}`)
     }
   }
 }
@@ -205,23 +208,23 @@ export async function listTools(options: { category?: string }): Promise<void> {
  * Enable a tool
  */
 export async function enableTool(name: string): Promise<void> {
-  console.log(`Enabling tool: ${name}`);
-  console.log('Tool enabled');
+  console.log(`Enabling tool: ${name}`)
+  console.log('Tool enabled')
 }
 
 /**
  * Disable a tool
  */
 export async function disableTool(name: string): Promise<void> {
-  console.log(`Disabling tool: ${name}`);
-  console.log('Tool disabled');
+  console.log(`Disabling tool: ${name}`)
+  console.log('Tool disabled')
 }
 
 /**
  * List all skills
  */
 export async function listSkills(options: { category?: string }): Promise<void> {
-  console.log('Available skills:');
+  console.log('Available skills:')
 
   const skills = [
     { name: 'commit', description: 'Create a git commit', category: 'git' },
@@ -229,11 +232,11 @@ export async function listSkills(options: { category?: string }): Promise<void> 
     { name: 'test', description: 'Run tests', category: 'development' },
     { name: 'build', description: 'Build the project', category: 'development' },
     { name: 'deploy', description: 'Deploy the application', category: 'deployment' },
-  ];
+  ]
 
   for (const skill of skills) {
     if (!options.category || skill.category === options.category) {
-      console.log(`  ${skill.name.padEnd(15)} - ${skill.description}`);
+      console.log(`  ${skill.name.padEnd(15)} - ${skill.description}`)
     }
   }
 }
@@ -242,9 +245,9 @@ export async function listSkills(options: { category?: string }): Promise<void> 
  * Run a specific skill
  */
 export async function runSkill(name: string, args: string[]): Promise<void> {
-  console.log(`Running skill: ${name}`);
-  console.log(`Arguments: ${args.join(' ')}`);
-  console.log('Skill execution complete');
+  console.log(`Running skill: ${name}`)
+  console.log(`Arguments: ${args.join(' ')}`)
+  console.log('Skill execution complete')
 }
 
 /**
@@ -252,13 +255,13 @@ export async function runSkill(name: string, args: string[]): Promise<void> {
  */
 export async function getConfig(key?: string): Promise<void> {
   if (key) {
-    console.log(`${key}: <value>`);
+    console.log(`${key}: <value>`)
   } else {
-    console.log('Configuration:');
-    console.log('  llm.model: claude-3-5-sonnet-20241022');
-    console.log('  llm.maxTokens: 4096');
-    console.log('  tools.enabled: [read, write, bash, search]');
-    console.log('  security.permissionLevel: ask');
+    console.log('Configuration:')
+    console.log('  llm.model: claude-3-5-sonnet-20241022')
+    console.log('  llm.maxTokens: 4096')
+    console.log('  tools.enabled: [read, write, bash, search]')
+    console.log('  security.permissionLevel: ask')
   }
 }
 
@@ -266,15 +269,15 @@ export async function getConfig(key?: string): Promise<void> {
  * Set configuration value
  */
 export async function setConfig(key: string, value: string): Promise<void> {
-  console.log(`Setting ${key} = ${value}`);
-  console.log('Configuration updated');
+  console.log(`Setting ${key} = ${value}`)
+  console.log('Configuration updated')
 }
 
 /**
  * Edit configuration file
  */
 export async function editConfig(): Promise<void> {
-  console.log('Opening configuration editor...');
+  console.log('Opening configuration editor...')
 }
 
 /**
@@ -304,18 +307,18 @@ async function loadConfig(configPath?: string): Promise<AgentConfig> {
       dbPath: '.nanocode/nanocode.db',
       sessionTTL: 7 * 24 * 60 * 60 * 1000,
     },
-  };
+  }
 
   if (configPath) {
-    const fs = await import('fs/promises');
+    const fs = await import('fs/promises')
     try {
-      const content = await fs.readFile(configPath, 'utf-8');
-      const userConfig = JSON.parse(content);
-      return { ...defaultConfig, ...userConfig };
+      const content = await fs.readFile(configPath, 'utf-8')
+      const userConfig = JSON.parse(content)
+      return { ...defaultConfig, ...userConfig }
     } catch {
-      console.warn(`Failed to load config from ${configPath}, using defaults`);
+      console.warn(`Failed to load config from ${configPath}, using defaults`)
     }
   }
 
-  return defaultConfig;
+  return defaultConfig
 }
